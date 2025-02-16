@@ -1,39 +1,39 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from .config import Config
-from datetime import datetime  # Add this import
+from flask_migrate import Migrate
+import os
 
+# Initialize extensions
 db = SQLAlchemy()
 login_manager = LoginManager()
+migrate = Migrate()
 
 def create_app():
+    # Create the Flask application
     app = Flask(__name__)
-    app.config.from_object(Config)
 
+    # Load configurations
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'your-secret-key'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'sqlite:///blink_records.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    # Initialize extensions with the app
     db.init_app(app)
     login_manager.init_app(app)
+    migrate.init_app(app, db)
 
-    # Register Blueprints
-    from app.routes import main  # Import the Blueprint
-    app.register_blueprint(main)  # Register it
-    
-    # Add a custom Jinja filter for datetime formatting
-    @app.template_filter('datetime')
-    def format_datetime(value, format="%Y-%m-%d %H:%M:%S"):
-        if value is None:
-            return ""
-        return value.strftime(format)
+    # Configure login manager
+    login_manager.login_view = 'login'  # Route for login page
+    login_manager.login_message_category = 'info'  # Bootstrap class for login messages
 
-    # Register Blueprints
-    from app.routes import main_routes
-    from app.auth import auth
+    # Register blueprints (routes)
+    from app.routes import main_routes, auth_routes
     app.register_blueprint(main_routes)
-    app.register_blueprint(auth)
+    app.register_blueprint(auth_routes)
 
-    # User loader
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
+    # Create database tables (if they don't exist)
+    with app.app_context():
+        db.create_all()
 
     return app
