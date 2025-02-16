@@ -65,3 +65,11 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('main.index'))
+
+@main_routes.route('/start_analysis', methods=['POST'])
+@login_required
+def start_analysis():
+    # Handle the start analysis logic here
+    activity = request.form.get('activity')  # Get the selected activity from the form
+    flash(f'Blink analysis started for activity: {activity}', 'success')
+    return redirect(url_for('main.profile'))
