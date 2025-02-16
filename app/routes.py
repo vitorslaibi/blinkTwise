@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, Response
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User, Session
 from app.forms import LoginForm, RegistrationForm, AnalysisForm
 from app import db  # Import the db object
+import cv2
 
 # Create blueprints
 main_routes = Blueprint('main', __name__)
@@ -68,10 +69,35 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('main.index'))
 
+from flask import jsonify
+
 @main_routes.route('/start_analysis', methods=['POST'])
 @login_required
 def start_analysis():
-    # Handle the start analysis logic here
-    activity = request.form.get('activity')  # Get the selected activity from the form
-    flash(f'Blink analysis started for activity: {activity}', 'success')
-    return redirect(url_for('main.profile'))
+    data = request.get_json()  # Get JSON data from the request
+    activity = data.get('activity')  # Get the selected activity
+    print(f"Starting analysis for activity: {activity}")  # Debugging
+
+    # Add your blink analysis logic here
+    # For now, just return a success message
+    return jsonify({
+        'status': 'success',
+        'message': f'Blink analysis started for activity: {activity}'
+    })
+
+def generate_frames():
+    camera = cv2.VideoCapture(0)  # Use the default camera
+    while True:
+        success, frame = camera.read()
+        if not success:
+            break
+        else:
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+@main_routes.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
