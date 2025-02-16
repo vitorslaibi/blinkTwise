@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
-from app.models import User
-from app.forms import LoginForm, RegistrationForm
+from app.models import User, Session
+from app.forms import LoginForm, RegistrationForm, AnalysisForm
 from app import db  # Import the db object
 
 # Create blueprints
@@ -16,7 +16,9 @@ def index():
 @main_routes.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html')
+    analysis_form = AnalysisForm()  # Create an instance of the AnalysisForm
+    blink_history = Session.query.filter_by(user_id=current_user.id).order_by(Session.begin_time.desc()).all()
+    return render_template('profile.html', analysis_form=analysis_form, blink_history=blink_history)
 
 @main_routes.route('/settings')
 @login_required
