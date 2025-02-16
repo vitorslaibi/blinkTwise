@@ -24,7 +24,7 @@ def create_app():
     migrate.init_app(app, db)
 
     # Configure login manager
-    login_manager.login_view = 'login'  # Route for login page
+    login_manager.login_view = 'auth.login'  # Route for login page
     login_manager.login_message_category = 'info'  # Bootstrap class for login messages
 
     # Register blueprints (routes)

@@ -13,16 +13,16 @@
                 <div class="mt-5">
                     <h3>Get Started</h3>
                     <div class="d-grid gap-3">
-                        <a href="{{ url_for('profile') }}" class="btn btn-primary btn-lg">Start Blink Analysis</a>
-                        <a href="{{ url_for('settings') }}" class="btn btn-outline-secondary btn-lg">Settings</a>
+                        <a href="{{ url_for('main.profile') }}" class="btn btn-primary btn-lg">Start Blink Analysis</a>
+                        <a href="{{ url_for('main.settings') }}" class="btn btn-outline-secondary btn-lg">Settings</a>
                     </div>
                 </div>
             {% else %}
                 <div class="mt-5">
                     <h3>Get Started</h3>
                     <div class="d-grid gap-3">
-                        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Login</a>
-                        <a href="{{ url_for('register') }}" class="btn btn-outline-secondary btn-lg">Register</a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">Login</a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-secondary btn-lg">Register</a>
                     </div>
                 </div>
             {% endif %}
