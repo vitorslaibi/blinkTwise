@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Welcome back, {{ current_user.username }}</h1>
+        <div class="session-stats">
+            <div class="stat-card">
+                <h3>Total Sessions</h3>
+                <p>{{ stats.total_sessions }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Average Blinks/Min</h3>
+                <p>{{ stats.avg_bpm|round(1) }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Monitor Time</h3>
+                <p>{{ stats.total_time }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="recent-sessions">
+            <h2>Recent Sessions</h2>
+            <div class="session-list">
+                {% for session in recent_sessions %}
+                <div class="session-card">
+                    <div class="session-info">
+                        <h3>{{ session.activity_type|title }} Session</h3>
+                        <p>{{ session.begin_time|datetime }}</p>
+                    </div>
+                    <div class="session-metrics">
+                        <div class="metric">
+                            <span class="label">Duration:</span>
+                            <span class="value">{{ session.duration }}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="label">Blinks:</span>
+                            <span class="value">{{ session.total_blinks }}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="label">Avg BPM:</span>
+                            <span class="value">{{ session.bpm|round(1) }}</span>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('session_details', session_id=session.id) }}" class="btn-secondary">View Details</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="activity-launcher">
+            <h2>Start New Session</h2>
+            <div class="activity-grid">
+                <div class="activity-card" data-activity="reading">
+                    <h3>Reading Mode</h3>
+                    <p>Optimal for reading text on screen</p>
+                    <button class="btn-start" onclick="startSession('reading')">Start</button>
+                </div>
+                <div class="activity-card" data-activity="gaze">
+                    <h3>General Mode</h3>
+                    <p>For general computer use</p>
+                    <button class="btn-start" onclick="startSession('gaze')">Start</button>
+                </div>
+                <div class="activity-card" data-activity="conversational">
+                    <h3>Interactive Mode</h3>
+                    <p>For video calls and meetings</p>
+                    <button class="btn-start" onclick="startSession('conversational')">Start</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/webcam.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
