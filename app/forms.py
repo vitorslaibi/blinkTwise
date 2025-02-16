@@ -1,26 +1,46 @@
-from flask import Blueprint, request, redirect, url_for, flash
-from flask_login import login_user, logout_user
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateTimeField
+from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from app.models import User
-from app import db
 
-# Create a Blueprint for authentication routes
-auth = Blueprint('auth', __name__)
+# Login Form
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=32)])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Login')
 
-@auth.route('/login', methods=['POST'])
-def login():
-    username = request.form['username']
-    password = request.form['password']
-    user = User.query.filter_by(username=username).first()
-    if user and user.password == password:  # In real apps, use password hashing!
-        login_user(user)
-        flash('Login successful!', 'success')
-        return redirect(url_for('main.profile'))
-    else:
-        flash('Invalid username or password', 'error')
-        return redirect(url_for('auth.login'))
+# Registration Form
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=32)])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')
 
-@auth.route('/logout')
-def logout():
-    logout_user()
-    flash('You have been logged out.', 'success')
-    return redirect(url_for('main.index'))
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('Username already taken. Please choose a different one.')
+
+# Analysis Form
+class AnalysisForm(FlaskForm):
+    activity = SelectField('Activity', choices=[
+        ('reading', 'Reading'),
+        ('gaze', 'Gaze'),
+        ('conversational', 'Conversational')
+    ], validators=[DataRequired()])
+    submit = SubmitField('Start Analysis')
+
+# Calibration Form
+class CalibrationForm(FlaskForm):
+    submit = SubmitField('Start Calibration')
+
+# Alarm Settings Form
+class AlarmSettingsForm(FlaskForm):
+    disable_alarms = BooleanField('Disable Alarms')
+    submit = SubmitField('Save Settings')
+
+# Activity Settings Form
+class ActivitySettingsForm(FlaskForm):
+    disable_activities = BooleanField('Disable Activities')
+    submit = SubmitField('Save Settings')
