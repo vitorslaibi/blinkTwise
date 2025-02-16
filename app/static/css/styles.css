@@ -1,74 +1,82 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+    background-color: #f8f9fa;
+    color: #333;
 }
 
-nav {
-    background-color: #68349C;
-    color: white;
-    padding: 10px 0;
+.container {
+    margin-top: 20px;
 }
 
-nav .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-nav .logo {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-nav .nav-links a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-}
-
-.content {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.flash-message {
-    padding: 10px;
+/* Navigation Bar */
+.navbar {
     margin-bottom: 20px;
-    background-color: #ffeb3b;
-    border-radius: 4px;
-    text-align: center;
 }
 
-form label {
-    display: block;
-    margin-bottom: 5px;
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Cards */
+.card {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #68349C;
+    color: white;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #68349C;
+    border-color: #68349C;
+}
+
+.btn-primary:hover {
+    background-color: #5a2d82;
+    border-color: #5a2d82;
+}
+
+.btn-outline-secondary {
+    border-color: #68349C;
+    color: #68349C;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #68349C;
+    color: white;
+}
+
+/* Forms */
+.form-label {
     font-weight: bold;
 }
 
-form input, form select, form button {
-    width: 100%;
-    padding: 10px;
+.form-control {
     margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
-form button {
-    background-color: #68349C;
-    color: white;
-    border: none;
-    cursor: pointer;
+/* Alerts */
+.alert {
+    margin-top: 20px;
 }
 
-form button:hover {
-    background-color: #5a2d82;
+/* Video Feed */
+#videoFeed {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }

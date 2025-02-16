@@ -15,14 +15,14 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text">Start monitoring your blink rate to ensure you stay alert and healthy.</p>
-                    <form method="POST" action="{{ url_for('main.start_analysis') }}">
+                    <form id="analysisForm">
                         {{ analysis_form.hidden_tag() }}
                         <div class="mb-3">
                             {{ analysis_form.activity.label(class="form-label") }}
-                            {{ analysis_form.activity(class="form-select") }}
+                            {{ analysis_form.activity(class="form-select", id="activity") }}
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Start Analysis</button>
+                            <button type="button" id="startAnalysis" class="btn btn-primary">Start Analysis</button>
                         </div>
                     </form>
                 </div>
@@ -46,8 +46,8 @@
                             <tbody>
                                 {% for session in blink_history %}
                                     <tr>
-                                        <td>{{ session.date }}</td>
-                                        <td>{{ session.blink_count }}</td>
+                                        <td>{{ session.begin_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                        <td>{{ session.total_blinks }}</td>
                                         <td>{{ session.duration }} mins</td>
                                     </tr>
                                 {% endfor %}
@@ -73,3 +73,6 @@
     </div>
 </div>
 {% endblock %}
+
+<!-- Include the scripts.js file -->
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
