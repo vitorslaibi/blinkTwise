@@ -14,6 +14,10 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
 
+    # Register Blueprints
+    from app.routes import main  # Import the Blueprint
+    app.register_blueprint(main)  # Register it
+    
     # Add a custom Jinja filter for datetime formatting
     @app.template_filter('datetime')
     def format_datetime(value, format="%Y-%m-%d %H:%M:%S"):

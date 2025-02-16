@@ -6,6 +6,6 @@
 {% if current_user.is_authenticated %}
     <a href="{{ url_for('profile') }}">Go to Profile</a>
 {% else %}
-    <a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a>
+    <a href="{{ url_for('main.login') }}">Login</a> | <a href="{{ url_for('main.register') }}">Register</a>
 {% endif %}
 {% endblock %}
