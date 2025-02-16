@@ -1,18 +1,67 @@
 {% extends "base.html" %}
 
+{% block title %}Settings - BlinkTwise{% endblock %}
+
 {% block content %}
-<h1>Settings</h1>
-<form method="POST" action="{{ url_for('update_settings') }}">
-    <label for="blink_threshold">Blink Threshold:</label>
-    <input type="number" id="blink_threshold" name="blink_threshold" value="{{ user.settings.blink_threshold }}" step="0.1" required>
-    <br>
-    <label for="alert_min">Minimum Blink Rate (BPM):</label>
-    <input type="number" id="alert_min" name="alert_min" value="{{ user.settings.alert_min }}" step="0.1" required>
-    <br>
-    <label for="alert_max">Maximum Blink Rate (BPM):</label>
-    <input type="number" id="alert_max" name="alert_max" value="{{ user.settings.alert_max }}" step="0.1" required>
-    <br>
-    <button type="submit">Save Settings</button>
-</form>
-<a href="{{ url_for('profile') }}">Back to Profile</a>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">Settings</h2>
+
+            <!-- Calibration Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Calibration</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Calibrate the blink detection system for better accuracy.</p>
+                    <form method="POST" action="{{ url_for('calibrate') }}">
+                        {{ calibration_form.hidden_tag() }}
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Start Calibration</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Alarm Settings Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Alarm Settings</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('update_alarm_settings') }}">
+                        {{ alarm_form.hidden_tag() }}
+                        <div class="mb-3 form-check form-switch">
+                            {{ alarm_form.disable_alarms(class="form-check-input", id="disableAlarms") }}
+                            {{ alarm_form.disable_alarms.label(class="form-check-label", for="disableAlarms") }}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Activity Settings Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Activity Settings</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('update_activity_settings') }}">
+                        {{ activity_form.hidden_tag() }}
+                        <div class="mb-3 form-check form-switch">
+                            {{ activity_form.disable_activities(class="form-check-input", id="disableActivities") }}
+                            {{ activity_form.disable_activities.label(class="form-check-label", for="disableActivities") }}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

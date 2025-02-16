@@ -1,18 +1,75 @@
 {% extends "base.html" %}
 
+{% block title %}Profile - BlinkTwise{% endblock %}
+
 {% block content %}
-<h1>Welcome, {{ user.username }}!</h1>
-<h2>Start Blink Analysis</h2>
-<form method="POST" action="{{ url_for('start_analysis') }}">
-    <label for="activity">Select Activity:</label>
-    <select id="activity" name="activity">
-        <option value="reading">Reading</option>
-        <option value="gaze">Primary Gaze</option>
-        <option value="conversational">Conversational</option>
-    </select>
-    <br>
-    <button type="submit">Start Analysis</button>
-</form>
-<h2>Settings</h2>
-<a href="{{ url_for('settings') }}">Go to Settings</a>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">User Profile</h2>
+
+            <!-- Blink Analysis Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Blink Analysis</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Start monitoring your blink rate to ensure you stay alert and healthy.</p>
+                    <form method="POST" action="{{ url_for('start_analysis') }}">
+                        {{ analysis_form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ analysis_form.activity.label(class="form-label") }}
+                            {{ analysis_form.activity(class="form-select") }}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Start Analysis</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Blink History Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Blink History</h5>
+                </div>
+                <div class="card-body">
+                    {% if blink_history %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Blinks</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for session in blink_history %}
+                                    <tr>
+                                        <td>{{ session.date }}</td>
+                                        <td>{{ session.blink_count }}</td>
+                                        <td>{{ session.duration }} mins</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-muted">No blink history available.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Settings</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Customize your BlinkTwise experience.</p>
+                    <a href="{{ url_for('settings') }}" class="btn btn-outline-secondary">Go to Settings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

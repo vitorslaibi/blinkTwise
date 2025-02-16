@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Blink Analysis - BlinkTwise{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">Blink Analysis</h2>
+
+            <!-- Real-Time Blink Data -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Real-Time Data</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="card-text"><strong>Blink Count:</strong> <span id="blinkCount">0</span></p>
+                            <p class="card-text"><strong>Closed Time:</strong> <span id="closedTime">0.00</span>s</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="card-text"><strong>Interval Time:</strong> <span id="intervalTime">0.00</span>s</p>
+                            <p class="card-text"><strong>Blinks Per Minute (BPM):</strong> <span id="bpm">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Feed -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Video Feed</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <img id="videoFeed" src="{{ url_for('video_feed') }}" class="img-fluid" alt="Video Feed">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="d-grid gap-2">
+                <button id="startAnalysis" class="btn btn-primary">Start Analysis</button>
+                <button id="stopAnalysis" class="btn btn-danger">Stop Analysis</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Real-Time Updates -->
+<script>
+    // WebSocket or AJAX logic for real-time updates
+    const blinkCountElement = document.getElementById('blinkCount');
+    const closedTimeElement = document.getElementById('closedTime');
+    const intervalTimeElement = document.getElementById('intervalTime');
+    const bpmElement = document.getElementById('bpm');
+
+    // Example: Update blink data every second (replace with WebSocket/AJAX logic)
+    setInterval(() => {
+        fetch('/get_blink_data')
+            .then(response => response.json())
+            .then(data => {
+                blinkCountElement.textContent = data.blink_count;
+                closedTimeElement.textContent = data.closed_time.toFixed(2);
+                intervalTimeElement.textContent = data.interval_time.toFixed(2);
+                bpmElement.textContent = data.bpm.toFixed(2);
+            });
+    }, 1000);
+
+    // Start/Stop Analysis Buttons
+    document.getElementById('startAnalysis').addEventListener('click', () => {
+        fetch('/start_analysis', { method: 'POST' });
+    });
+
+    document.getElementById('stopAnalysis').addEventListener('click', () => {
+        fetch('/stop_analysis', { method: 'POST' });
+    });
+</script>
+{% endblock %}
