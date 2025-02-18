@@ -14,6 +14,13 @@ auth_routes = Blueprint('auth', __name__)
 def index():
     return render_template('index.html')
 
+@main_routes.route('/calibrate', methods=['POST'])
+@login_required
+def calibrate():
+    # Add calibration logic here
+    flash('Calibration completed.', 'success')
+    return redirect(url_for('main.settings'))
+
 @main_routes.route('/profile')
 @login_required
 def profile():
