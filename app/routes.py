@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, Response
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User, Session
-from app.forms import LoginForm, RegistrationForm, AnalysisForm
+from app.forms import LoginForm, RegistrationForm, AnalysisForm, CalibrationForm
 from app import db  # Import the db object
 import cv2
 
@@ -31,7 +31,8 @@ def profile():
 @main_routes.route('/settings')
 @login_required
 def settings():
-    return render_template('settings.html')
+    calibration_form = CalibrationForm()  # Create an instance of CalibrationForm
+    return render_template('settings.html', calibration_form=calibration_form)
 
 @main_routes.route('/analysis')
 @login_required

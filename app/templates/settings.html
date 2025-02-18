@@ -14,11 +14,10 @@
                     <h5 class="card-title">Calibration</h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">Calibrate the blink detection system for better accuracy.</p>
                     <form method="POST" action="{{ url_for('main.calibrate') }}">
                         {{ calibration_form.hidden_tag() }}
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Start Calibration</button>
+                            {{ calibration_form.submit(class="btn btn-primary") }}
                         </div>
                     </form>
                 </div>
@@ -30,7 +29,7 @@
                     <h5 class="card-title">Alarm Settings</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ url_for('update_alarm_settings') }}">
+                    <form method="POST" action="{{ url_for('main.update_alarm_settings') }}">
                         {{ alarm_form.hidden_tag() }}
                         <div class="mb-3 form-check form-switch">
                             {{ alarm_form.disable_alarms(class="form-check-input", id="disableAlarms") }}
@@ -49,7 +48,7 @@
                     <h5 class="card-title">Activity Settings</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ url_for('update_activity_settings') }}">
+                    <form method="POST" action="{{ url_for('main.update_activity_settings') }}">
                         {{ activity_form.hidden_tag() }}
                         <div class="mb-3 form-check form-switch">
                             {{ activity_form.disable_activities(class="form-check-input", id="disableActivities") }}
