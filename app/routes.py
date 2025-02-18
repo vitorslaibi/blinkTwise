@@ -128,11 +128,7 @@ def start_analysis():
     )
     db.session.add(session)
     db.session.commit()
-    
-    # Start video processing in background thread
-    Thread(target=detect_blinks, args=(session.id,)).start()
-    
-    return redirect(url_for('main.analysis', session_id=session.id))
+    return redirect(url_for('main.analysis', session_id=session.id))  # Pass session_id
 
 @main_routes.route('/calibrate', methods=['POST'])
 @login_required
