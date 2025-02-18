@@ -15,14 +15,14 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text">Start monitoring your blink rate to ensure you stay alert and healthy.</p>
-                    <form id="analysisForm">
+                    <form method="POST" action="{{ url_for('main.start_analysis') }}">
                         {{ analysis_form.hidden_tag() }}
                         <div class="mb-3">
                             {{ analysis_form.activity.label(class="form-label") }}
-                            {{ analysis_form.activity(class="form-select", id="activity") }}
+                            {{ analysis_form.activity(class="form-select") }}
                         </div>
                         <div class="d-grid">
-                            <button type="button" id="startAnalysis" class="btn btn-primary">Start Analysis</button>
+                            <button type="submit" class="btn btn-primary">Start Analysis</button>
                         </div>
                     </form>
                 </div>

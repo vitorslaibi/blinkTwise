@@ -49,10 +49,12 @@ def settings():
                          alarm_form=alarm_form,
                          activity_form=activity_form)
 
-@main_routes.route('/analysis')
+@main_routes.route('/analysis/<int:session_id>')
 @login_required
-def analysis():
-    return render_template('analysis.html')
+def analysis(session_id):
+    # Fetch the session to ensure it exists
+    session = Session.query.get_or_404(session_id)
+    return render_template('analysis.html', session_id=session.id)
 
 # --------------------------
 # Video Streaming & Analysis
@@ -130,7 +132,7 @@ def start_analysis():
     # Start video processing in background thread
     Thread(target=detect_blinks, args=(session.id,)).start()
     
-    return redirect(url_for('main.analysis'))
+    return redirect(url_for('main.analysis', session_id=session.id))
 
 @main_routes.route('/calibrate', methods=['POST'])
 @login_required
