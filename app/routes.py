@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, Response
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User, Session
-from app.forms import LoginForm, RegistrationForm, AnalysisForm, CalibrationForm
+from app.forms import LoginForm, RegistrationForm, AnalysisForm, CalibrationForm, AlarmSettingsForm, ActivitySettingsForm
 from app import db  # Import the db object
 import cv2
 
@@ -21,6 +21,20 @@ def calibrate():
     flash('Calibration completed.', 'success')
     return redirect(url_for('main.settings'))
 
+@main_routes.route('/update_alarm_settings', methods=['POST'])
+@login_required
+def update_alarm_settings():
+    # Add logic to update alarm settings here
+    flash('Alarm settings updated.', 'success')
+    return redirect(url_for('main.settings'))
+
+@main_routes.route('/update_activity_settings', methods=['POST'])
+@login_required
+def update_activity_settings():
+    # Add logic to update activity settings here
+    flash('Activity settings updated.', 'success')
+    return redirect(url_for('main.settings'))
+
 @main_routes.route('/profile')
 @login_required
 def profile():
@@ -32,8 +46,9 @@ def profile():
 @login_required
 def settings():
     calibration_form = CalibrationForm()  # Create an instance of CalibrationForm
-    return render_template('settings.html', calibration_form=calibration_form)
-
+    alarm_form = AlarmSettingsForm()
+    activity_form = ActivitySettingsForm()
+    return render_template('settings.html', calibration_form=calibration_form, alarm_form=alarm_form, activity_form=activity_form)
 @main_routes.route('/analysis')
 @login_required
 def analysis():
