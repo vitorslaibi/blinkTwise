@@ -52,10 +52,14 @@ def settings():
 @main_routes.route('/analysis/<int:session_id>')
 @login_required
 def analysis(session_id):
-    # Fetch the session to ensure it exists
-    session = Session.query.get_or_404(session_id)
-    return render_template('analysis.html', session_id=session.id)
+    return render_template('analysis.html', session_id=session_id)
 
+@main_routes.route('/test_webcam')
+def test_webcam():
+    camera = cv2.VideoCapture(0)
+    success, frame = camera.read()
+    camera.release()
+    return f"Webcam accessible: {success}"
 # --------------------------
 # Video Streaming & Analysis
 # --------------------------
@@ -85,16 +89,17 @@ def generate_frames(session_id):
             cv2.putText(frame, f"Blinks: {session.total_blinks}", (10, 50), 
                       cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
+        # Encode frame as JPEG
         ret, buffer = cv2.imencode('.jpg', frame)
+        frame = buffer.tobytes()
         yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
-
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        
 @main_routes.route('/video_feed/<int:session_id>')
 @login_required
 def video_feed(session_id):
     return Response(generate_frames(session_id),
                   mimetype='multipart/x-mixed-replace; boundary=frame')
-
 # --------------------------
 # Data Endpoints
 # --------------------------
